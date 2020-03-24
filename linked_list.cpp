@@ -16,7 +16,7 @@ class L
         Node *next;
     };
     
-    private:
+    protected:
     Node* head{NULL};
 
 public:
@@ -72,6 +72,21 @@ public:
    }
 };
 
+// Define Stack by re-using above list class
+class Stack : public L {
+    public:
+        void push(int x) { insert(x); }
+        void pop() { 
+            // How can Stack class access head, when head is the private member of L. What changes should I make?
+            // considering that Stack is derived from L.
+            // If Stack is not derived, then friend is good. But if derived, then is there any simple way
+            // so that only Stack can access and not from public scope
+            // Answer : Make inside L, head as protected access type of data member
+            if (head != NULL)
+                remove(head->data);
+        }
+};
+
 int main() {
    L obj;
    obj.insert(3);
@@ -84,7 +99,7 @@ int main() {
    obj.remove(2);
    obj.display();
    int f = 3;
-   L::Node nd = obj.find(f);
+   L::Node* nd = obj.find(f);
    // L::NodeIterator nd = obj.begin();
    // if (nd != obj.end())
     // cout << *nd << endl;
@@ -93,11 +108,16 @@ int main() {
    // }
    if (nd != NULL)
     cout << "Found node for " << f << endl;
-   return 0;
    
-   list<int> l;
-   l.push_back(5);
-   list<int>::iterator li = l.begin();
-   if (li != l.end())
-    cout << *li << endl;
+      Stack sobj;
+    sobj.push(5);
+    sobj.push(10);
+    cout << "Stack contents: ";
+    sobj.display();
+    sobj.pop();
+    cout << "Stack contents: ";
+    sobj.display();
+ 
+   return 0;
+
 }
